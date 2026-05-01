@@ -1,0 +1,20 @@
+server:
+  host: "0.0.0.0"
+  port: 8080
+  environment: "production"
+  domain: "localhost"
+  protocol: "http"
+  root_url: "http://localhost:3609"
+  max_body_size: 314572800
+
+garage:
+  endpoint: "http://garaged:3600"
+  region: "garage"
+  admin_endpoint: "http://garaged:3603"
+  admin_token: "${GARAGE_ADMIN_TOKEN}"
+
+auth:
+  admin:
+    enabled: true
+    username: "admin"
+    password: "${GARAGE_UI_AUTH_ADMIN_PASSWORD}"
