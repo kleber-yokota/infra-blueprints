@@ -1,3 +1,6 @@
+garage/data/
+garage/meta/
+garage/.env
 postgres/.env
 postgres/config/
 postgres/data/
