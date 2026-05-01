@@ -1,0 +1,51 @@
+services:
+  garaged:
+    image: dxflrs/garage:v2.2.0
+    container_name: garaged
+    ports:
+      - "3600:3600"
+      - "3601:3601"
+      - "3602:3602"
+      - "3603:3603"
+    environment:
+      - GARAGE_RPC_SECRET=${GARAGE_RPC_SECRET}
+      - GARAGE_ADMIN_TOKEN=${GARAGE_ADMIN_TOKEN}
+      - GARAGE_METRICS_TOKEN=${GARAGE_METRICS_TOKEN}
+    volumes:
+      - ./config/garage.toml:/etc/garage.toml:ro
+      - ./meta:/var/lib/garage/meta
+      - ./data:/var/lib/garage/data
+
+    restart: unless-stopped
+    networks:
+      - internal
+
+  garage-ui:
+    image: noooste/garage-ui:v0.2.2
+    container_name: garage-ui
+    ports:
+      - "3609:8080"
+    environment:
+      - GARAGE_UI_SERVER_PORT=8080
+      - GARAGE_UI_GARAGE_ENDPOINT=http://garaged:3600
+      - GARAGE_UI_GARAGE_ADMIN_ENDPOINT=http://garaged:3603
+      - GARAGE_UI_GARAGE_ADMIN_TOKEN=${GARAGE_ADMIN_TOKEN}
+      - GARAGE_UI_GARAGE_REGION=garage
+
+      - GARAGE_UI_AUTH_ADMIN_PASSWORD=${GARAGE_UI_AUTH_ADMIN_PASSWORD}
+      - GARAGE_UI_AUTH_OIDC_CLIENT_SECRET=${GARAGE_UI_AUTH_OIDC_CLIENT_SECRET}
+    volumes:
+      - ./config/garage-ui-config.yaml:/app/config.yaml:ro
+    depends_on:
+      garaged:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - internal
+      - external
+
+networks:
+  internal:
+    external: true
+  external:
+    external: true
