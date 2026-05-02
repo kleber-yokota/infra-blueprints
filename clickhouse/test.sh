@@ -4,6 +4,9 @@ set -e
 ENV_FILE="$(cd "$(dirname "$0")" && pwd)/.env"
 source "$ENV_FILE"
 
+CLICKHOUSE_USER="${CLICKHOUSE_USER:-ch_admin}"
+CLICKHOUSE_DB="${CLICKHOUSE_DB:-clickhouse_warehouse}"
+
 BASE_URL="http://localhost:8123"
 
 # Query function: $1 = sql, $2 = database (optional)
