@@ -1,0 +1,29 @@
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:26.2
+    container_name: clickhouse_db
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - CLICKHOUSE_CONFIG=/etc/clickhouse-server/config.yaml
+      - CLICKHOUSE_DB=clickhouse_warehouse
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - ./data:/var/lib/clickhouse
+      - ./data/access:/var/lib/clickhouse/access
+      - ./configs/config.yaml:/etc/clickhouse-server/config.yaml
+      - ./configs/users.yaml:/etc/clickhouse-server/users.d/users.yaml
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8123/ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  internal:
+    external: true
