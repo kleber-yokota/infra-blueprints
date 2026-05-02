@@ -21,7 +21,7 @@ services:
       - internal
 
   garage-ui:
-    image: noooste/garage-ui:v0.2.2
+    image: noooste/garage-ui:v0.4.3
     container_name: garage-ui
     ports:
       - "3609:8080"
