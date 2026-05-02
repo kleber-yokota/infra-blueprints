@@ -4,3 +4,7 @@ garage/.env
 postgres/.env
 postgres/config/
 postgres/data/
+clickhouse/.env
+clickhouse/data/
+clickhouse/scripts/
+clickhouse/test.sh
