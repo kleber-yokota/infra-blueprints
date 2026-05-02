@@ -18,7 +18,7 @@ user_files_path: /var/lib/clickhouse/user_files/
 format_schema_path: /var/lib/clickhouse/format_schemas/
 
 user_directories:
-  users_xml:
-    path: /etc/clickhouse-server/users.d/users.yaml
   local_directory:
     path: /var/lib/clickhouse/access/
+  users_xml:
+    path: /etc/clickhouse-server/users.d/users.yaml
