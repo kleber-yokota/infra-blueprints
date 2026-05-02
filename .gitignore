@@ -7,4 +7,4 @@ postgres/data/
 clickhouse/.env
 clickhouse/data/
 clickhouse/scripts/
-clickhouse/test.sh
+llama/models/
