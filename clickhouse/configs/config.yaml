@@ -1,0 +1,24 @@
+# ClickHouse Server Configuration (YAML)
+# Native YAML format - supported since ClickHouse 22.9
+
+logger:
+  level: warning
+  log: /var/log/clickhouse-server/clickhouse-server.log
+  errorlog: /var/log/clickhouse-server/clickhouse-server-error.log
+  size: 1000M
+  count: 3
+
+http_port: 8123
+tcp_port: 9000
+listen_host: 0.0.0.0
+
+path: /var/lib/clickhouse/
+tmp_path: /var/lib/clickhouse/tmp/
+user_files_path: /var/lib/clickhouse/user_files/
+format_schema_path: /var/lib/clickhouse/format_schemas/
+
+user_directories:
+  users_xml:
+    path: /etc/clickhouse-server/users.d/users.yaml
+  local_directory:
+    path: /var/lib/clickhouse/access/

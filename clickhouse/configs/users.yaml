@@ -1,0 +1,33 @@
+# ClickHouse Users Configuration (YAML)
+# Passwords via environment variables using @from_env
+
+profiles:
+  default:
+    max_memory_usage: 10000000000
+    load_balancing: in_order
+    log_queries: 1
+
+  readonly:
+    readonly: 1
+
+users:
+  default:
+    profile: default
+    networks:
+      ip: "::/0"
+    password: ""
+
+  ch_admin:
+    profile: default
+    networks:
+      ip: "::/0"
+    password:
+      - '@from_env': CLICKHOUSE_PASSWORD
+    access_management: 1
+
+  superset_user:
+    profile: readonly
+    networks:
+      ip: "::/0"
+    password:
+      - '@from_env': CLICKHOUSE_SUPERSET_PASSWORD
