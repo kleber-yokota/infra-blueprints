@@ -1,0 +1,61 @@
+services:
+  download:
+    image: python:3.11-slim
+    volumes:
+      - ./models:/models
+    environment:
+      - HF_TOKEN=${HF_TOKEN}
+    command:
+      - bash
+      - -c
+      - |
+        pip install -q huggingface_hub
+        mkdir -p /models
+        python -c "
+        from huggingface_hub import hf_hub_download
+        hf_hub_download(
+            repo_id='unsloth/Qwen3.6-35B-A3B-GGUF',
+            filename='Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf',
+            local_dir='/models'
+        )
+        "
+
+  llama:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    networks:
+      - internal
+    ports:
+      - "8181:8080"
+    volumes:
+      - ./models:/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    command:
+      - --model
+      - /models/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8080"
+      - --fit
+      - "on"
+      - --ctx-size
+      - "262144"
+      - --parallel
+      - "1"
+      - --cache-type-k
+      - q8_0
+      - --cache-type-v
+      - q8_0
+    restart: unless-stopped
+    depends_on:
+      download:
+        condition: service_completed_successfully
+networks:
+  internal:
+    external: true
