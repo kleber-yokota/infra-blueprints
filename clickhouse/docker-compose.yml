@@ -6,20 +6,21 @@ services:
     env_file:
       - .env
     environment:
-      - CLICKHOUSE_CONFIG=/etc/clickhouse-server/config.yaml
       - CLICKHOUSE_DB=clickhouse_warehouse
     ports:
       - "8123:8123"
       - "9000:9000"
     volumes:
-      - ./data:/var/lib/clickhouse
-      - ./data/access:/var/lib/clickhouse/access
+      # Mapeado diretamente para o destino correto (config.yaml substitui o config.xml padrão)
       - ./configs/config.yaml:/etc/clickhouse-server/config.yaml
+      # Mantido na pasta users.d, o ClickHouse lerá automaticamente
       - ./configs/users.yaml:/etc/clickhouse-server/users.d/users.yaml
+      - ./configs/storage.yaml:/etc/clickhouse-server/config.d/s3.yaml:ro
     networks:
       - internal
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8123/ping"]
+      # Modificado para usar curl, que é mais garantido estar presente na imagem
+      test: ["CMD", "curl", "-f", "http://localhost:8123/ping"]
       interval: 10s
       timeout: 5s
       retries: 5
