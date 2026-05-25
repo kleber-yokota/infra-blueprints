@@ -16,6 +16,7 @@ services:
       - ./data/access:/var/lib/clickhouse/access
       - ./configs/config.yaml:/etc/clickhouse-server/config.yaml
       - ./configs/users.yaml:/etc/clickhouse-server/users.d/users.yaml
+      - ./config.d/storage.yaml:/etc/clickhouse-server/config.d/storage.yaml
     networks:
       - internal
     healthcheck:
