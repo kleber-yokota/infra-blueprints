@@ -1,0 +1,12 @@
+storage_configuration:
+  disks:
+    garage_s3_disk:
+      type: s3
+      # O ClickHouse vai substituir isso pelo valor da variável de ambiente
+      endpoint: "${GARAGE_ENDPOINT}"
+      access_key_id: "${GARAGE_ACCESS_KEY}"
+      secret_access_key: "${GARAGE_SECRET_KEY}"
+      metadata_path: "/var/lib/clickhouse/disks/garage_s3_disk/"
+      cache:
+        path: "/var/lib/clickhouse/disks/garage_s3_disk/cache/"
+        max_size: "10Gi"
